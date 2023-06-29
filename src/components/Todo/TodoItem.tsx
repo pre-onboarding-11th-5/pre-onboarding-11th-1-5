@@ -35,7 +35,7 @@ function TodoItem({ todo, isUpdate }: TodoItemProps) {
   const [edit, setEdit] = useState<boolean>(false);
   const [check, setCheck] = useState<boolean>(todo.isCompleted);
   const [updateTodo] = useUpdateTodo();
-  const [deleteTodo] = useDeleteTodo();
+  const deleteTodo = useDeleteTodo();
 
   const handleEdit = () => {
     setEdit(!edit);

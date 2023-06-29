@@ -1,7 +1,6 @@
 /* eslint-disable no-alert */
-import axios from "axios";
 import client from "axiosInstance/client";
-import { ErrorResponse } from "types/types";
+import alertError from "libs/alertError";
 
 const deleteTodoAPI = (id: number) =>
   client.delete(`/todos/${id}`, {
@@ -18,14 +17,12 @@ const useDeleteTodo = () => {
       alert("삭제 되었습니다!");
       return true;
     } catch (e) {
-      if (axios.isAxiosError<ErrorResponse>(e) && e.response) {
-        alert(e.response?.data.message);
-      }
+      alertError(e);
       return null;
     }
   };
 
-  return [deleteTodo];
+  return deleteTodo;
 };
 
 export default useDeleteTodo;

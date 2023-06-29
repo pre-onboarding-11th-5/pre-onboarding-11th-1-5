@@ -1,7 +1,6 @@
 /* eslint-disable no-alert */
-import axios from "axios";
 import client from "axiosInstance/client";
-import type { ErrorResponse } from "types/types";
+import alertError from "libs/alertError";
 import type { TodoType } from "../components/Todo/types";
 
 const createTodoAPI = (todo: string) =>
@@ -18,9 +17,7 @@ const useCreateTodo = () => {
       alert("추가에 성공했습니다.");
       return data;
     } catch (e) {
-      if (axios.isAxiosError<ErrorResponse>(e) && e.response) {
-        alert(e.response.data.message);
-      }
+      alertError(e);
       return null;
     }
   };
