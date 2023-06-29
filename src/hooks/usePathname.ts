@@ -2,14 +2,14 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const usePathname = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const [isSignin, setIsSignin] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsSignin(location.pathname === "/signin");
-  }, [location.pathname]);
+    setIsSignin(pathname === "/signin");
+  }, [pathname]);
 
-  return [isSignin];
+  return isSignin;
 };
 
 export default usePathname;

@@ -11,18 +11,19 @@ interface ModifyInputProps {
 
 function ModifyInput({ todo, handleEdit, isUpdate }: ModifyInputProps) {
   const [value, setValue] = useState(todo.todo);
-  const [updateTodo] = useUpdateTodo();
+  const updateTodo = useUpdateTodo();
 
   const handleSubmit = async () => {
     if (todo.todo === value) {
       handleEdit();
       return;
     }
-    const { data } = await updateTodo({
+
+    const updatedTodo = await updateTodo({
       ...todo,
       todo: value,
     });
-    if (data) {
+    if (updatedTodo) {
       isUpdate();
       handleEdit();
     }

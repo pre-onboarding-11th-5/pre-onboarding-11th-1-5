@@ -16,20 +16,20 @@ interface TodoInputProps {
 }
 
 function TodoInput({ isUpdate }: TodoInputProps) {
-  const [todo, setTodo] = useState<TodoType>({
+  const [todo, setTodo] = useState<Pick<TodoType, "todo" | "isCompleted">>({
     todo: "",
     isCompleted: false,
   });
 
-  const [createTodo] = useCreateTodo();
+  const createTodo = useCreateTodo();
 
   const handleTodoValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodo({ ...todo, todo: e.target.value });
   };
 
   const addTodo = async () => {
-    const { data } = await createTodo(todo.todo);
-    if (data) {
+    const createTodoResponse = await createTodo(todo.todo);
+    if (createTodoResponse) {
       isUpdate();
     }
   };

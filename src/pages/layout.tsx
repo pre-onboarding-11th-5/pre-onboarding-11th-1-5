@@ -3,6 +3,7 @@ import { breakpoints } from "styles/breakPoints";
 
 import { Outlet } from "react-router-dom";
 import Header from "components/Header/Header";
+import useRedirectByJwt from "hooks/useRedirectByJwt";
 
 const Main = styled.main`
   position: relative;
@@ -16,6 +17,8 @@ const Main = styled.main`
 `;
 
 function RootLayout() {
+  useRedirectByJwt();
+
   return (
     <>
       <Header />

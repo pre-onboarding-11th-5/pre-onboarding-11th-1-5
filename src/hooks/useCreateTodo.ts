@@ -1,41 +1,24 @@
 /* eslint-disable no-alert */
-import axios from "axios";
 import client from "axiosInstance/client";
-import type { AxiosResponseType } from "types/types";
+import alertError from "libs/alertError";
 import type { TodoType } from "../components/Todo/types";
 
-const createTodoAPI = async (todo: string): Promise<TodoType> => {
-  try {
-    const response = await client.post("/todos", {
-      todo,
-    });
-    alert("추가에 성공했습니다.");
-
-    return response.data;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
-      alert(e.response?.data.message);
-    }
-    throw e;
-  }
-};
+const createTodoAPI = (todo: string) =>
+  client.post<TodoType>("/todos", { todo });
 
 const useCreateTodo = () => {
-  const createTodo = async (
-    todo: string,
-  ): Promise<AxiosResponseType<TodoType>> => {
+  const createTodo = async (todo: string) => {
     try {
-      const todos = await createTodoAPI(todo);
-      return { data: todos, error: null };
+      const { data } = await createTodoAPI(todo);
+      alert("추가에 성공했습니다.");
+      return data;
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        return { data: null, error: e };
-      }
-      throw e;
+      alertError(e);
+      return null;
     }
   };
 
-  return [createTodo];
+  return createTodo;
 };
 
 export default useCreateTodo;
