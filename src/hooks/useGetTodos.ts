@@ -6,8 +6,8 @@ import type { AxiosResponseType } from "types/types";
 
 const getTodosAPI = async (): Promise<TodoType[]> => {
   try {
-    const response = await client.get("/todos");
-    return response.data;
+    const data = await (await client.get("/todos")).data;
+    return data;
   } catch (e) {
     if (axios.isAxiosError(e)) {
       alert(e.response?.data.message);
