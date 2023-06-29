@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
-import useRedirectByJwt from "hooks/useRedirectByJwt";
 import TodoInput from "components/Todo/TodoInput";
-import TodoList from "components/Todo/TodoList";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import useQuery from "hooks/useQuery";
+import { TodoType } from "components/Todo/types";
+import TodoItem from "components/Todo/TodoItem";
+import isLoggedInFN from "hooks/isLoggedIn";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -12,20 +15,62 @@ const Wrapper = styled.div`
 
   padding: 1rem;
 `;
+const TodoListWrapper = styled.div`
+  padding: 1rem;
+
+  ul {
+    width: 100%;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+`;
 
 function TodoPage() {
-  const [update, setUpdate] = useState<boolean>(false);
-  useRedirectByJwt();
+  const navigate = useNavigate();
+  const [todos, setTodos] = useState<TodoType[]>();
+  const { data, loading, error, status } = useQuery<TodoType[]>("todos");
+  const [token, setToken] = useState<string | null>(isLoggedInFN());
+  const onClickLogoutBtn = useCallback(() => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  }, [navigate]);
+  useEffect(() => {
+    const handleSetToken = () => setToken(isLoggedInFN());
+    window.addEventListener("storage", handleSetToken);
+    return () => window.removeEventListener("storage", handleSetToken);
+  }, []);
 
-  const handleUpdate = () => {
-    setUpdate(!update);
-  };
+  useEffect(() => {
+    if (!loading && data) {
+      setTodos(data);
+    }
+    if (!loading && status === 401) {
+      onClickLogoutBtn();
+    }
+  }, [data, loading, error, onClickLogoutBtn, status]);
 
-  return (
+  return token ? (
     <Wrapper>
-      <TodoInput isUpdate={handleUpdate} />
-      <TodoList update={update} isUpdate={handleUpdate} />
+      <TodoInput setTodos={setTodos} />
+      <TodoListWrapper>
+        <ul>
+          {todos?.map((todo) => (
+            <TodoItem
+              id={todo.id}
+              isCompleted={todo.isCompleted}
+              todo={todo.todo}
+              userId={todo.userId}
+              key={todo.id}
+              setTodos={setTodos}
+            />
+          ))}
+        </ul>
+      </TodoListWrapper>
     </Wrapper>
+  ) : (
+    <Navigate replace to="/signin" />
   );
 }
 

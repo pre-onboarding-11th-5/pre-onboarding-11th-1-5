@@ -1,10 +1,7 @@
 import AuthForm from "components/Auth/AuthForm";
-import useRedirectByJwt from "hooks/useRedirectByJwt";
 
-function AuthPage() {
-  useRedirectByJwt();
-
-  return <AuthForm />;
+function AuthPage({ type }: { type: "signin" | "signup" }) {
+  return <AuthForm isSignin={type === "signin"} />;
 }
 
 export default AuthPage;

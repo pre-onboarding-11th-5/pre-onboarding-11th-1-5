@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { breakpoints } from "styles/breakPoints";
-
 import { Outlet } from "react-router-dom";
 import Header from "components/Header/Header";
 
