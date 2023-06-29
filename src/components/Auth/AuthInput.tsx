@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Label, Input, GuideMsg } from "./styles";
+import { Input, GuideMsg } from "./styles";
 
 interface AuthInputProps {
   handleValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -8,7 +8,7 @@ interface AuthInputProps {
   id: string;
   type: string;
   title: string;
-  validation: boolean;
+  validateMessage: string;
 }
 
 function AuthInput({
@@ -18,7 +18,7 @@ function AuthInput({
   id,
   type,
   title,
-  validation,
+  validateMessage,
 }: AuthInputProps) {
   const [focus, setFocus] = useState<boolean>(false);
 
@@ -30,19 +30,10 @@ function AuthInput({
     }
   };
 
-  const guideMsg =
-    type === "text"
-      ? "'@'를 포함해주세요"
-      : "비밀번호는 8글자 이상으로 해주세요.";
-
-  const visibleMsg = !validation && value.length > 0;
-
   return (
     <div>
-      <Label htmlFor={id} focus={focus}>
-        {title}
-      </Label>
       <Input
+        placeholder={title}
         id={id}
         data-testid={testId}
         onChange={handleValue}
@@ -51,9 +42,9 @@ function AuthInput({
         value={value}
         onFocus={handleFocus}
         onBlur={handleFocus}
-        visible={visibleMsg}
+        visible={value.length >= 1 && validateMessage.length !== 0}
       />
-      <GuideMsg visible={visibleMsg}>{guideMsg}</GuideMsg>
+      <GuideMsg visible={value.length >= 1}>{validateMessage}</GuideMsg>
     </div>
   );
 }

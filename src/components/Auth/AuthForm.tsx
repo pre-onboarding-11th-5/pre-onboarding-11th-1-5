@@ -1,29 +1,61 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
-import useValidation from "./hooks/useValidation";
-import usePathname from "./hooks/usePathname";
-import useRegister from "./hooks/useRegister";
-import useLogin from "./hooks/useLogin";
+import useMutation from "hooks/useMutation";
+
+import styled from "styled-components";
+import isLoggedInFN from "hooks/isLoggedIn";
 
 import { Form, Button } from "./styles";
 import AuthInput from "./AuthInput";
 
-function AuthForm() {
+interface AuthFormResponseData {
+  access_token?: string;
+}
+const Section = styled.section`
+  text-align: center;
+`;
+const ErrorMessage = styled.span`
+  font-size: medium;
+  color: tomato;
+`;
+function AuthForm({ isSignin = false }: { isSignin: boolean }) {
   const navigate = useNavigate();
 
-  const [signUp] = useRegister();
-  const [signIn] = useLogin();
-
-  const [isSignin] = usePathname();
+  const [validateMessage, setValidateMessage] = useState<{
+    email: string;
+    password: string;
+  }>({ email: "", password: "" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signHandler, { data, loading, status, error }] =
+    useMutation<AuthFormResponseData>({
+      method: "POST",
+      url: `/auth/${isSignin ? "signin" : "signup"}`,
+    });
+  useEffect(() => {
+    if (!email.includes("@"))
+      setValidateMessage((prev) => ({ ...prev, email: "'@'를 포함해주세요" }));
+    else setValidateMessage((prev) => ({ ...prev, email: "" }));
+    if (password.length < 8)
+      setValidateMessage((prev) => ({
+        ...prev,
+        password: "  비밀번호는 8글자 이상으로 해주세요.",
+      }));
+    else setValidateMessage((prev) => ({ ...prev, password: "" }));
+  }, [email, password]);
+  useEffect(() => {
+    if (!loading && data && data.access_token) {
+      localStorage.setItem("token", data.access_token);
+      navigate("/todo");
+    }
+    if (!loading && status === 201) {
+      navigate("/signin");
+    }
+  }, [data, loading, status, error, navigate]);
 
   const testId = isSignin ? "signin-button" : "signup-button";
   const text = isSignin ? "로그인" : "회원가입";
-
-  const [emailValidation] = useValidation("email", email);
-  const [passwordValidation] = useValidation("password", password);
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -35,53 +67,45 @@ function AuthForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (isSignin) {
-      const { data } = await signIn(email, password);
-
-      if (data !== null) {
-        navigate("/todo");
-        window.location.reload();
-      }
-    } else {
-      const { data } = await signUp(email, password);
-
-      if (data !== null) {
-        navigate("/signin");
-      }
-    }
+    signHandler({ email, password });
   };
 
-  return (
+  return isLoggedInFN() ? (
+    <Navigate replace to="/todo" />
+  ) : (
     <Form onSubmit={handleSubmit}>
-      <fieldset>
+      <Section>
         <legend>{text}</legend>
         <AuthInput
           id="email"
           testId="email-input"
           handleValue={handleEmail}
           value={email}
+          validateMessage={validateMessage.email}
           type="text"
           title="이메일"
-          validation={emailValidation}
         />
         <AuthInput
           id="password"
           testId="password-input"
           handleValue={handlePassword}
+          validateMessage={validateMessage.password}
           value={password}
           type="password"
           title="패스워드"
-          validation={passwordValidation}
         />
         <Button
           type="submit"
           data-testid={testId}
-          disabled={!emailValidation || !passwordValidation}
+          disabled={
+            validateMessage.email !== "" || validateMessage.email !== ""
+          }
         >
           {text}
         </Button>
-      </fieldset>
+
+        {error ? <ErrorMessage>{error}</ErrorMessage> : null}
+      </Section>
     </Form>
   );
 }
