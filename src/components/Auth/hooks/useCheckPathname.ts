@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const usePathname = () => {
+const useCheckPathname = () => {
   const location = useLocation();
   const [isSignin, setIsSignin] = useState<boolean>(false);
 
@@ -12,4 +12,4 @@ const usePathname = () => {
   return [isSignin];
 };
 
-export default usePathname;
+export default useCheckPathname;

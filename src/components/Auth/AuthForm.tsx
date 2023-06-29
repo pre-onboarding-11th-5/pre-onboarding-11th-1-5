@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useValidation from "./hooks/useValidation";
-import usePathname from "./hooks/usePathname";
+import useCheckPathname from "./hooks/useCheckPathname";
 import useRegister from "./hooks/useRegister";
 import useLogin from "./hooks/useLogin";
 
@@ -15,7 +15,7 @@ function AuthForm() {
   const [signUp] = useRegister();
   const [signIn] = useLogin();
 
-  const [isSignin] = usePathname();
+  const [isSignin] = useCheckPathname();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
