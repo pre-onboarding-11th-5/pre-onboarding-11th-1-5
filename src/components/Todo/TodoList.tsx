@@ -1,8 +1,9 @@
 import styled from "styled-components";
+
 import { useEffect, useState } from "react";
-import type { AxiosResponseType } from "types/types";
 
 import useGetTodos from "hooks/useGetTodos";
+
 import type { TodoType } from "./types";
 
 import TodoItem from "./TodoItem";
@@ -25,29 +26,29 @@ interface TodoListProps {
 }
 
 function TodoList({ update, isUpdate }: TodoListProps) {
-  const [data, setData] = useState<AxiosResponseType<TodoType[]>>({
-    data: null,
-    error: null,
-  });
-  const [getTodos] = useGetTodos();
+  const [data, setData] = useState<TodoType[]>();
 
-  const getData = async () => {
-    const todos = await getTodos();
-    setData(todos);
-  };
+  const [error, setError] = useState(false);
+
+  const [getTodos] = useGetTodos();
 
   useEffect(() => {
     if (localStorage.getItem("jwt")) {
-      getData();
+      (async () => {
+        const { data: todos } = await getTodos();
+        if (todos) setData(todos);
+        else setError(true);
+      })();
     }
-  }, [update]);
+  }, [update, getTodos]);
 
   return (
     <TodoListWrapper>
-      {data.error && <h2>Error가 발생했습니다..!</h2>}
+      {error && <h2>Error가 발생했습니다..!</h2>}
+
       <ul>
-        {data.data?.map((e) => (
-          <TodoItem todo={e} key={e.id} isUpdate={isUpdate} />
+        {data?.map((e) => (
+          <TodoItem todo={e} key={e?.id} isUpdate={isUpdate} />
         ))}
       </ul>
     </TodoListWrapper>
