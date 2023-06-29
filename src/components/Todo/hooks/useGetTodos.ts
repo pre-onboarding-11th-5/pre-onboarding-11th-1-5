@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
-import axios from "axios";
+import { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
 import client from "axiosInstance/client";
-import type { AxiosResponseType } from "types/types";
 import type { TodoType } from "../types";
 
 const getTodosAPI = async (): Promise<TodoType[]> => {
@@ -21,19 +21,34 @@ const getTodosAPI = async (): Promise<TodoType[]> => {
 };
 
 const useGetTodos = () => {
-  const getTodos = async (): Promise<AxiosResponseType<TodoType[]>> => {
+  const [todoData, setTodoData] = useState<TodoType[]>();
+  const [trigger, setTrigger] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>("");
+  const getTodos = async (): Promise<void | {
+    data: null;
+    error: AxiosError;
+    // eslint-disable-next-line consistent-return
+  }> => {
     try {
       const todos = await getTodosAPI();
-      return { data: todos, error: null };
+      setTodoData(todos);
     } catch (e) {
       if (axios.isAxiosError(e)) {
-        return { data: null, error: e };
+        setErrorMsg(e.message);
       }
       throw e;
     }
   };
 
-  return [getTodos];
+  useEffect(() => {
+    if (localStorage.getItem("jwt")) getTodos();
+  }, [trigger]);
+
+  async function refetch() {
+    setTrigger((prev) => !prev);
+  }
+
+  return { todoData, refetch, errorMsg };
 };
 
 export default useGetTodos;
