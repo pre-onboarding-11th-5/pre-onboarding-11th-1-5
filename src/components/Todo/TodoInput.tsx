@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { Button, Input } from "./styles";
-import useCreateTodo from "./hooks/useCreateTodo";
+import useCreateTodo from "../../hooks/useCreateTodo";
 
 import type { TodoType } from "./types";
 
@@ -21,15 +21,15 @@ function TodoInput({ isUpdate }: TodoInputProps) {
     isCompleted: false,
   });
 
-  const [createTodo] = useCreateTodo();
+  const createTodo = useCreateTodo();
 
   const handleTodoValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodo({ ...todo, todo: e.target.value });
   };
 
   const addTodo = async () => {
-    const { data } = await createTodo(todo.todo);
-    if (data) {
+    const createTodoResponse = await createTodo(todo.todo);
+    if (createTodoResponse) {
       isUpdate();
     }
   };
