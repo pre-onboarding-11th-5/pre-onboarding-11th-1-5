@@ -10,7 +10,9 @@ const useInput = (initialValue: string) => {
     [],
   );
 
-  return [value, handleValue] as const;
+  const reset = useCallback(() => setValue(() => initialValue), [initialValue]);
+
+  return [value, handleValue, reset] as const;
 };
 
 export default useInput;
