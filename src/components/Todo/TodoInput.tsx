@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { Button, Input } from "./styles";
-import useCreateTodo from "./hooks/useCreateTodo";
+import useCreateTodo from "../../hooks/useCreateTodo";
 
 import type { TodoType } from "./types";
 

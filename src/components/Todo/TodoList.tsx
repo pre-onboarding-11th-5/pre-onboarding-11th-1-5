@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import type { AxiosResponseType } from "types/types";
-import useGetTodos from "./hooks/useGetTodos";
 
+import useGetTodos from "hooks/useGetTodos";
 import type { TodoType } from "./types";
 
 import TodoItem from "./TodoItem";

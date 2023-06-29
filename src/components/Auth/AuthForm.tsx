@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useValidation from "./hooks/useValidation";
-import usePathname from "./hooks/usePathname";
-import useRegister from "./hooks/useRegister";
-import useLogin from "./hooks/useLogin";
+import useRegister from "hooks/useRegister";
+import usePathname from "hooks/usePathname";
+import useValidation from "hooks/useValidation";
+import useLogin from "../../hooks/useLogin";
 
 import { Form, Button } from "./styles";
 import AuthInput from "./AuthInput";
