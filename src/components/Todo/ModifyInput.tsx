@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Input } from "./styles";
 import type { TodoType } from "./types";
 
-import useUpdateTodo from "./hooks/useUpateTodo";
+import useUpdateTodo from "../../hooks/useUpateTodo";
 
 interface ModifyInputProps {
   todo: TodoType;
@@ -12,14 +12,14 @@ interface ModifyInputProps {
 
 function ModifyInput({ todo, handleEdit, isUpdate }: ModifyInputProps) {
   const [value, setValue] = useState(todo.todo);
-  const [updateTodo] = useUpdateTodo();
+  const updateTodo = useUpdateTodo();
 
   const handleSubmit = async () => {
-    const { data } = await updateTodo({
+    const updatedTodo = await updateTodo({
       ...todo,
       todo: value,
     });
-    if (data) {
+    if (updatedTodo) {
       isUpdate();
       handleEdit();
     }

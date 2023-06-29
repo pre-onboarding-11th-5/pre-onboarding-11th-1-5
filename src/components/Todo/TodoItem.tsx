@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "./styles";
 
 import ModifyInput from "./ModifyInput";
-import useUpdateTodo from "./hooks/useUpateTodo";
+import useUpdateTodo from "../../hooks/useUpateTodo";
 import useDeleteTodo from "../../hooks/useDeleteTodo";
 
 import type { TodoType } from "./types";
@@ -34,7 +34,7 @@ interface TodoItemProps {
 function TodoItem({ todo, isUpdate }: TodoItemProps) {
   const [edit, setEdit] = useState<boolean>(false);
   const [check, setCheck] = useState<boolean>(todo.isCompleted);
-  const [updateTodo] = useUpdateTodo();
+  const updateTodo = useUpdateTodo();
   const deleteTodo = useDeleteTodo();
 
   const handleEdit = () => {
@@ -42,12 +42,12 @@ function TodoItem({ todo, isUpdate }: TodoItemProps) {
   };
 
   const handleCheck = async () => {
-    const { data } = await updateTodo({
+    const updatedTodo = await updateTodo({
       ...todo,
       isCompleted: !todo.isCompleted,
     });
-    if (data) {
-      setCheck(data.isCompleted);
+    if (updatedTodo) {
+      setCheck(updatedTodo.isCompleted);
       isUpdate();
     }
   };
