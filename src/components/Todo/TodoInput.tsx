@@ -1,9 +1,7 @@
 import styled from "styled-components";
-import { useState } from "react";
+import useInput from "hooks/useInput";
 import { Button, Input } from "./styles";
 import useCreateTodo from "../../hooks/useCreateTodo";
-
-import type { TodoType } from "./types";
 
 const TodoInputWrapper = styled.div`
   display: flex;
@@ -16,21 +14,15 @@ interface TodoInputProps {
 }
 
 function TodoInput({ isUpdate }: TodoInputProps) {
-  const [todo, setTodo] = useState<TodoType>({
-    todo: "",
-    isCompleted: false,
-  });
+  const [todo, handleTodoValue] = useInput("");
 
   const [createTodo] = useCreateTodo();
 
-  const handleTodoValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTodo({ ...todo, todo: e.target.value });
-  };
-
   const addTodo = async () => {
-    const { data } = await createTodo(todo.todo);
+    const { data } = await createTodo(todo);
     if (data) {
       isUpdate();
+      // useInput에 추가한 reset 적용
     }
   };
 
@@ -38,7 +30,7 @@ function TodoInput({ isUpdate }: TodoInputProps) {
     <TodoInputWrapper>
       <Input
         data-testid="new-todo-input"
-        value={todo.todo}
+        value={todo}
         onChange={handleTodoValue}
       />
       <Button type="button" data-testid="new-todo-add-button" onClick={addTodo}>
