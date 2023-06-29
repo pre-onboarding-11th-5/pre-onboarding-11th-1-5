@@ -14,6 +14,10 @@ function ModifyInput({ todo, handleEdit, isUpdate }: ModifyInputProps) {
   const [updateTodo] = useUpdateTodo();
 
   const handleSubmit = async () => {
+    if (todo.todo === value) {
+      handleEdit();
+      return;
+    }
     const { data } = await updateTodo({
       ...todo,
       todo: value,
