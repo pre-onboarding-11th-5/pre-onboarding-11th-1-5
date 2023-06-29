@@ -16,7 +16,7 @@ interface TodoInputProps {
 }
 
 function TodoInput({ isUpdate }: TodoInputProps) {
-  const [todo, setTodo] = useState<TodoType>({
+  const [todo, setTodo] = useState<Pick<TodoType, "todo" | "isCompleted">>({
     todo: "",
     isCompleted: false,
   });
