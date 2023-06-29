@@ -4,11 +4,7 @@ import alertError from "libs/alertError";
 import type { TodoType } from "../components/Todo/types";
 
 const createTodoAPI = (todo: string) =>
-  client.post<TodoType>(
-    "/todos",
-    { todo },
-    { headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` } },
-  );
+  client.post<TodoType>("/todos", { todo });
 
 const useCreateTodo = () => {
   const createTodo = async (todo: string) => {

@@ -4,19 +4,10 @@ import alertError from "libs/alertError";
 import type { TodoType } from "../components/Todo/types";
 
 const updateTodoAPI = (todo: TodoType) =>
-  client.put<TodoType>(
-    `/todos/${todo.id}`,
-    {
-      todo: todo.todo,
-      isCompleted: todo.isCompleted,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-        "Content-Type": "application/json",
-      },
-    },
-  );
+  client.put<TodoType>(`/todos/${todo.id}`, {
+    todo: todo.todo,
+    isCompleted: todo.isCompleted,
+  });
 
 const useUpdateTodo = () => {
   const updateTodo = async (todo: TodoType) => {

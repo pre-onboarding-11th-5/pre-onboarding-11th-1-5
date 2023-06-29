@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { useState } from "react";
+import useUpdateTodo from "hooks/useUpateTodo";
+import useDeleteTodo from "hooks/useDeleteTodo";
 import { Button } from "./styles";
 
 import ModifyInput from "./ModifyInput";
-import useUpdateTodo from "../../hooks/useUpateTodo";
-import useDeleteTodo from "../../hooks/useDeleteTodo";
 
 import type { TodoType } from "./types";
 

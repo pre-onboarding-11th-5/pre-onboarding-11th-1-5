@@ -3,12 +3,7 @@ import client from "axiosInstance/client";
 import alertError from "libs/alertError";
 import type { TodoType } from "../components/Todo/types";
 
-const getTodosAPI = () =>
-  client.get<TodoType[]>("/todos", {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-    },
-  });
+const getTodosAPI = () => client.get<TodoType[]>("/todos");
 
 const useGetTodos = () => {
   const getTodos = async () => {

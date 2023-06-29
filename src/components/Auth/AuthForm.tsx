@@ -1,10 +1,10 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useValidation from "../../hooks/useValidation";
-import usePathname from "../../hooks/usePathname";
-import useRegister from "../../hooks/useRegister";
-import useLogin from "../../hooks/useLogin";
+import useRegister from "hooks/useRegister";
+import usePathname from "hooks/usePathname";
+import useValidation from "hooks/useValidation";
+import useInput from "hooks/useInput";
+import useLogin from "hooks/useLogin";
 
 import { Form, Button } from "./styles";
 import AuthInput from "./AuthInput";
@@ -16,22 +16,14 @@ function AuthForm() {
   const signIn = useLogin();
 
   const isSignin = usePathname();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, handleEmail] = useInput("");
+  const [password, handlePassword] = useInput("");
 
   const testId = isSignin ? "signin-button" : "signup-button";
   const text = isSignin ? "로그인" : "회원가입";
 
   const emailValidation = useValidation("email", email);
   const passwordValidation = useValidation("password", password);
-
-  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

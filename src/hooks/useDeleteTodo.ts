@@ -2,13 +2,7 @@
 import client from "axiosInstance/client";
 import alertError from "libs/alertError";
 
-const deleteTodoAPI = (id: number) =>
-  client.delete(`/todos/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-      "Content-Type": "application/json",
-    },
-  });
+const deleteTodoAPI = (id: number) => client.delete(`/todos/${id}`);
 
 const useDeleteTodo = () => {
   const deleteTodo = async (id: number) => {

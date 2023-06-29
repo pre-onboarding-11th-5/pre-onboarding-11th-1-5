@@ -1,8 +1,7 @@
 import { useState } from "react";
+import useUpdateTodo from "hooks/useUpateTodo";
 import { Button, Input } from "./styles";
 import type { TodoType } from "./types";
-
-import useUpdateTodo from "../../hooks/useUpateTodo";
 
 interface ModifyInputProps {
   todo: TodoType;
