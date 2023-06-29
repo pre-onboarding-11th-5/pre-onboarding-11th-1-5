@@ -2,7 +2,7 @@
 import axios from "axios";
 import client from "axiosInstance/client";
 import type { AxiosResponseType } from "types/types";
-import type { TodoType } from "../types";
+import type { TodoType } from "../components/Todo/types";
 
 const createTodoAPI = async (todo: string): Promise<TodoType> => {
   try {

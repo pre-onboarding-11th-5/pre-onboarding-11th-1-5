@@ -1,8 +1,8 @@
 /* eslint-disable no-alert */
 import axios from "axios";
 import client from "axiosInstance/client";
+import { TodoType } from "components/Todo/types";
 import type { AxiosResponseType } from "types/types";
-import type { TodoType } from "../types";
 
 const deleteTodoAPI = async (todo: TodoType): Promise<boolean> => {
   try {
