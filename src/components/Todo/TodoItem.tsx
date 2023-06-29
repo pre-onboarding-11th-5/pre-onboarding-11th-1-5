@@ -34,29 +34,27 @@ interface TodoItemProps {
 function TodoItem({ todo, isUpdate }: TodoItemProps) {
   const [edit, setEdit] = useState<boolean>(false);
   const [check, setCheck] = useState<boolean>(todo.isCompleted);
-  const [updateTodo] = useUpdateTodo();
-  const [deleteTodo] = useDeleteTodo();
+  const updateTodo = useUpdateTodo();
+  const deleteTodo = useDeleteTodo();
 
   const handleEdit = () => {
     setEdit(!edit);
   };
 
   const handleCheck = async () => {
-    const { data } = await updateTodo({
+    const updatedTodo = await updateTodo({
       ...todo,
       isCompleted: !todo.isCompleted,
     });
-    if (data) {
-      setCheck(data.isCompleted);
+    if (updatedTodo) {
+      setCheck(updatedTodo.isCompleted);
       isUpdate();
     }
   };
 
   const handleDelete = async () => {
-    const { data } = await deleteTodo({
-      ...todo,
-    });
-    if (data) {
+    const deleteTodoResponse = await deleteTodo(todo.id);
+    if (deleteTodoResponse) {
       isUpdate();
     }
   };

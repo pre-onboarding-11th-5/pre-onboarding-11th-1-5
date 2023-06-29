@@ -1,45 +1,32 @@
 /* eslint-disable no-alert */
-import axios from "axios";
 import client from "axiosInstance/client";
+import alertError from "libs/alertError";
 
-import type { AxiosResponseType } from "types/types";
+import type { SignInType } from "types/types";
 
-const signInAPI = async (email: string, password: string): Promise<any> => {
-  try {
-    const response = await client.post("/auth/signin", {
-      email,
-      password,
-    });
-
-    alert("로그인 되었습니다.");
-    localStorage.setItem("jwt", response.data.access_token);
-    return response.data;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
-      alert(e.response?.data.message);
-    }
-    throw e;
-  }
-};
+const signInAPI = (email: string, password: string) =>
+  client.post<SignInType>("/auth/signin", {
+    email,
+    password,
+  });
 
 const useLogin = () => {
-  const signIn = async (
-    email: string,
-    password: string,
-  ): Promise<AxiosResponseType<any>> => {
+  const signIn = async (email: string, password: string) => {
     try {
-      const data = await signInAPI(email, password);
-      return { data, error: null };
+      const {
+        data: { access_token: token },
+      } = await signInAPI(email, password);
+
+      localStorage.setItem("jwt", token);
+      alert("로그인 되었습니다.");
+      return token;
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        alert(e.response?.data.message);
-        return { data: null, error: e };
-      }
-      throw e;
+      alertError(e);
+      return null;
     }
   };
 
-  return [signIn];
+  return signIn;
 };
 
 export default useLogin;

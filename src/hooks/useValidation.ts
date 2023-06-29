@@ -1,23 +1,20 @@
 import { useState, useEffect } from "react";
 
 // email, password 검증
-const useValidation = (
-  type: "email" | "password",
-  value: string,
-): [boolean] => {
+const useValidation = (type: "email" | "password", value: string) => {
   const [validation, setValidation] = useState<boolean>(false);
-  const emailRegExp = /@/;
-  const passwordRegExp = /^.{8,}$/;
 
   useEffect(() => {
+    const emailRegExp = /@/;
+    const passwordRegExp = /^.{8,}$/;
     if (type === "email") {
       setValidation(emailRegExp.test(value));
     } else {
       setValidation(passwordRegExp.test(value));
     }
-  }, [value]);
+  }, [type, value]);
 
-  return [validation];
+  return validation;
 };
 
 export default useValidation;

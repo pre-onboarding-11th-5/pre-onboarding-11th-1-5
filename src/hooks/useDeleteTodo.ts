@@ -1,38 +1,22 @@
 /* eslint-disable no-alert */
-import axios from "axios";
 import client from "axiosInstance/client";
-import { TodoType } from "components/Todo/types";
-import type { AxiosResponseType } from "types/types";
+import alertError from "libs/alertError";
 
-const deleteTodoAPI = async (todo: TodoType): Promise<boolean> => {
-  try {
-    await client.delete(`/todos/${todo.id}`);
-    alert("삭제 되었습니다!");
-    return true;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
-      alert(e.response?.data.message);
-    }
-    throw e;
-  }
-};
+const deleteTodoAPI = (id: number) => client.delete(`/todos/${id}`);
 
 const useDeleteTodo = () => {
-  const deleteTodo = async (
-    todo: TodoType,
-  ): Promise<AxiosResponseType<boolean>> => {
+  const deleteTodo = async (id: number) => {
     try {
-      const isSuccess = await deleteTodoAPI(todo);
-      return { data: isSuccess, error: null };
+      await deleteTodoAPI(id);
+      alert("삭제 되었습니다!");
+      return true;
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        return { data: null, error: e };
-      }
-      throw e;
+      alertError(e);
+      return null;
     }
   };
 
-  return [deleteTodo];
+  return deleteTodo;
 };
 
 export default useDeleteTodo;
