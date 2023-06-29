@@ -1,6 +1,4 @@
 import styled from "styled-components";
-
-import useRedirectByJwt from "hooks/useRedirectByJwt";
 import TodoInput from "components/Todo/TodoInput";
 import TodoList from "components/Todo/TodoList";
 
@@ -15,8 +13,6 @@ const Wrapper = styled.div`
 
 function TodoPage() {
   const [update, setUpdate] = useState<boolean>(false);
-  useRedirectByJwt();
-
   const handleUpdate = () => {
     setUpdate(!update);
   };
