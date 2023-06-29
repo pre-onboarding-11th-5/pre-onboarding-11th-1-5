@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useValidation from "./hooks/useValidation";
+import useValidation from "../../hooks/useValidation";
 import usePathname from "../../hooks/usePathname";
 import useRegister from "../../hooks/useRegister";
 import useLogin from "../../hooks/useLogin";
@@ -22,8 +22,8 @@ function AuthForm() {
   const testId = isSignin ? "signin-button" : "signup-button";
   const text = isSignin ? "로그인" : "회원가입";
 
-  const [emailValidation] = useValidation("email", email);
-  const [passwordValidation] = useValidation("password", password);
+  const emailValidation = useValidation("email", email);
+  const passwordValidation = useValidation("password", password);
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
