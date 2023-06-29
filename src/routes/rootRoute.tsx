@@ -19,13 +19,24 @@ function AuthRoute() {
   return <Outlet />;
 }
 
+function TodoRoute() {
+  const jwt = localStorage.getItem("jwt");
+  if (!jwt) {
+    alert("로그인해주세요.");
+    return <Navigate to="/signin" replace />;
+  }
+  return <Outlet />;
+}
+
 function RootRoute() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<RootLayout />}>
           <Route index element={<LandingPage />} />
-          <Route path="todo" element={<TodoPage />} />
+          <Route element={<TodoRoute />}>
+            <Route path="todo" element={<TodoPage />} />
+          </Route>
           <Route element={<AuthRoute />}>
             <Route path="signup" element={<AuthPage />} />
             <Route path="signin" element={<AuthPage />} />
