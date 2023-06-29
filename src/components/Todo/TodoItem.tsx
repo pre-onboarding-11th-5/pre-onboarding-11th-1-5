@@ -1,10 +1,8 @@
 import styled from "styled-components";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import useMutation from "hooks/useMutation";
+import apiSlash from "hooks/utils";
 import { Button } from "./styles";
-
-import ModifyInput from "./ModifyInput";
-import useUpdateTodo from "./hooks/useUpateTodo";
-import useDeleteTodo from "./hooks/useDeleteTodo";
 
 import type { TodoType } from "./types";
 
@@ -25,76 +23,88 @@ const Li = styled.li`
     font-size: 1.6rem;
   }
 `;
-
-interface TodoItemProps {
-  todo: TodoType;
-  isUpdate: () => void;
+interface TodoItemProps extends TodoType {
+  setTodos: React.Dispatch<React.SetStateAction<TodoType[] | undefined>>;
 }
+function TodoItem({ isCompleted, todo, id, setTodos }: TodoItemProps) {
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [inputTodo, setInputTodo] = useState("");
 
-function TodoItem({ todo, isUpdate }: TodoItemProps) {
-  const [edit, setEdit] = useState<boolean>(false);
-  const [check, setCheck] = useState<boolean>(todo.isCompleted);
-  const [updateTodo] = useUpdateTodo();
-  const [deleteTodo] = useDeleteTodo();
+  const [
+    updateTodo,
+    { data: updateData, loading: updateLoading, status: updateStatus },
+  ] = useMutation<TodoType>({
+    method: "PUT",
+    url: apiSlash<string | number>("todos", id),
+  });
+  const [deleteTodo, { loading: deleteLoading, status: deleteStatus }] =
+    useMutation({
+      method: "DELETE",
+      url: apiSlash<string | number>("todos", id),
+    });
+
+  useEffect(() => {
+    if (!updateLoading && updateData) {
+      setTodos((prev) =>
+        prev?.map((todos) => (todos.id === id ? updateData : todos)),
+      );
+    }
+  }, [updateLoading, updateStatus]);
+
+  useEffect(() => {
+    if (!deleteLoading && deleteStatus === 204) {
+      setTodos((prev) => prev?.filter((todos) => todos.id !== id));
+    }
+  }, [deleteLoading, deleteStatus, setTodos, id]);
 
   const handleEdit = () => {
-    setEdit(!edit);
+    setEditMode((prev) => !prev);
+    setInputTodo(todo);
   };
-
-  const handleCheck = async () => {
-    const { data } = await updateTodo({
-      ...todo,
-      isCompleted: !todo.isCompleted,
-    });
-    if (data) {
-      setCheck(data.isCompleted);
-      isUpdate();
-    }
+  const handleCheck = () => updateTodo({ id, todo, isCompleted: !isCompleted });
+  const handleUpdate = () => {
+    if (todo !== inputTodo) updateTodo({ id, todo: inputTodo, isCompleted });
+    setEditMode((prev) => !prev);
   };
-
-  const handleDelete = async () => {
-    const { data } = await deleteTodo({
-      ...todo,
-    });
-    if (data) {
-      isUpdate();
-    }
-  };
+  const handleDelete = () => deleteTodo(id);
 
   return (
     <Li>
-      {edit && (
-        <ModifyInput todo={todo} handleEdit={handleEdit} isUpdate={isUpdate} />
-      )}
-      {!edit && (
-        <>
-          <label htmlFor={`${todo.id}`}>
+      <>
+        <label htmlFor={`${id}`}>
+          <input
+            id={`${id}`}
+            type="checkbox"
+            checked={isCompleted}
+            onChange={handleCheck}
+          />
+          {editMode ? (
             <input
-              id={`${todo.id}`}
-              type="checkbox"
-              checked={check}
-              onChange={handleCheck}
+              id={id.toString()}
+              value={inputTodo}
+              onChange={(e) => setInputTodo(e.currentTarget.value)}
             />
-            <span>{todo.todo}</span>
-          </label>
-          <Button
-            type="button"
-            data-testid="modify-button"
-            onClick={handleEdit}
-          >
-            수정
-          </Button>
-          <Button
-            type="button"
-            data-testid="delete-button"
-            onClick={handleDelete}
-          >
-            삭제
-          </Button>
-        </>
-      )}
+          ) : (
+            <span>{todo}</span>
+          )}
+        </label>
+        <Button
+          type="button"
+          data-testid="modify-button"
+          onClick={editMode ? handleUpdate : handleEdit}
+        >
+          {editMode ? "제출" : "수정"}
+        </Button>
+        <Button
+          type="button"
+          data-testid="delete-button"
+          onClick={editMode ? handleEdit : handleDelete}
+        >
+          {editMode ? "취소" : "삭제"}
+        </Button>
+      </>
     </Li>
   );
 }
 
-export default TodoItem;
+export default React.memo(TodoItem);

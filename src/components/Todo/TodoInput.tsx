@@ -1,9 +1,8 @@
+import useMutation from "hooks/useMutation";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Input } from "./styles";
-import useCreateTodo from "./hooks/useCreateTodo";
-
-import type { TodoType } from "./types";
+import { TodoType } from "./types";
 
 const TodoInputWrapper = styled.div`
   display: flex;
@@ -11,34 +10,37 @@ const TodoInputWrapper = styled.div`
   padding: 1rem;
 `;
 
-interface TodoInputProps {
-  isUpdate: () => void;
-}
-
-function TodoInput({ isUpdate }: TodoInputProps) {
-  const [todo, setTodo] = useState<TodoType>({
-    todo: "",
-    isCompleted: false,
+function TodoInput({
+  setTodos,
+}: {
+  setTodos: React.Dispatch<React.SetStateAction<TodoType[] | undefined>>;
+}) {
+  const [todo, setTodo] = useState("");
+  const [createTodo, { loading, status, data, error }] = useMutation<TodoType>({
+    method: "POST",
+    url: "todos",
   });
 
-  const [createTodo] = useCreateTodo();
+  useEffect(() => {
+    if (loading !== true && data) {
+      setTodos((prev) => [...prev!, data]);
+    }
+  }, [status, error, data, loading, setTodos]);
 
   const handleTodoValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTodo({ ...todo, todo: e.target.value });
+    setTodo(e.target.value);
   };
-
-  const addTodo = async () => {
-    const { data } = await createTodo(todo.todo);
-    if (data) {
-      isUpdate();
-    }
+  const addTodo = () => {
+    if (loading) return;
+    createTodo({ todo });
+    setTodo("");
   };
 
   return (
     <TodoInputWrapper>
       <Input
         data-testid="new-todo-input"
-        value={todo.todo}
+        value={todo}
         onChange={handleTodoValue}
       />
       <Button type="button" data-testid="new-todo-add-button" onClick={addTodo}>
