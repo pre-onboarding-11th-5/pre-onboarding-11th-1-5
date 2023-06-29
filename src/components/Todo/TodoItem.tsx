@@ -4,7 +4,7 @@ import { Button } from "./styles";
 
 import ModifyInput from "./ModifyInput";
 import useUpdateTodo from "./hooks/useUpateTodo";
-import useDeleteTodo from "./hooks/useDeleteTodo";
+import useDeleteTodo from "../../hooks/useDeleteTodo";
 
 import type { TodoType } from "./types";
 
@@ -53,10 +53,8 @@ function TodoItem({ todo, isUpdate }: TodoItemProps) {
   };
 
   const handleDelete = async () => {
-    const { data } = await deleteTodo({
-      ...todo,
-    });
-    if (data) {
+    const deleteTodoResponse = await deleteTodo(todo.id);
+    if (deleteTodoResponse) {
       isUpdate();
     }
   };
