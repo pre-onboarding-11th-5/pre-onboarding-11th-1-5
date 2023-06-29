@@ -10,3 +10,7 @@ export type ErrorResponse = {
   message: string | string[];
   error?: string;
 };
+
+export type SignInType = {
+  access_token: string;
+};

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useValidation from "./hooks/useValidation";
 import usePathname from "./hooks/usePathname";
 import useRegister from "./hooks/useRegister";
-import useLogin from "./hooks/useLogin";
+import useLogin from "../../hooks/useLogin";
 
 import { Form, Button } from "./styles";
 import AuthInput from "./AuthInput";
@@ -13,7 +13,7 @@ function AuthForm() {
   const navigate = useNavigate();
 
   const [signUp] = useRegister();
-  const [signIn] = useLogin();
+  const signIn = useLogin();
 
   const [isSignin] = usePathname();
   const [email, setEmail] = useState("");
@@ -37,12 +37,12 @@ function AuthForm() {
     e.preventDefault();
 
     if (isSignin) {
-      const { data } = await signIn(email, password);
+      const token = await signIn(email, password);
 
-      if (data !== null) {
-        navigate("/todo");
-        window.location.reload();
-      }
+      if (!token) return;
+
+      navigate("/todo");
+      window.location.reload();
     } else {
       const { data } = await signUp(email, password);
 
