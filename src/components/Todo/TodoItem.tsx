@@ -3,7 +3,6 @@ import { useState } from "react";
 import useUpdateTodo from "hooks/useUpateTodo";
 import useDeleteTodo from "hooks/useDeleteTodo";
 import { Button } from "./styles";
-
 import ModifyInput from "./ModifyInput";
 
 import type { TodoType } from "./types";
