@@ -31,6 +31,7 @@ function TodoInput({ isUpdate }: TodoInputProps) {
     const { data } = await createTodo(todo.todo);
     if (data) {
       isUpdate();
+      setTodo((prev) => ({ ...prev, todo: "" }));
     }
   };
 
