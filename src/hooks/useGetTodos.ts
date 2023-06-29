@@ -1,16 +1,12 @@
 /* eslint-disable no-alert */
 import axios from "axios";
 import client from "axiosInstance/client";
+import { TodoType } from "components/Todo/types";
 import type { AxiosResponseType } from "types/types";
-import type { TodoType } from "../types";
 
 const getTodosAPI = async (): Promise<TodoType[]> => {
   try {
-    const response = await client.get("/todos", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-      },
-    });
+    const response = await client.get("/todos");
     return response.data;
   } catch (e) {
     if (axios.isAxiosError(e)) {

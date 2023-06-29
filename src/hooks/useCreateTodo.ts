@@ -6,17 +6,9 @@ import type { TodoType } from "../components/Todo/types";
 
 const createTodoAPI = async (todo: string): Promise<TodoType> => {
   try {
-    const response = await client.post(
-      "/todos",
-      {
-        todo,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-        },
-      },
-    );
+    const response = await client.post("/todos", {
+      todo,
+    });
     alert("추가에 성공했습니다.");
 
     return response.data;

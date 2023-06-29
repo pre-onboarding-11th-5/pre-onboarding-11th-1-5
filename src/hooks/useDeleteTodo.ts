@@ -6,12 +6,7 @@ import type { AxiosResponseType } from "types/types";
 
 const deleteTodoAPI = async (todo: TodoType): Promise<boolean> => {
   try {
-    await client.delete(`/todos/${todo.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-        "Content-Type": "application/json",
-      },
-    });
+    await client.delete(`/todos/${todo.id}`);
     alert("삭제 되었습니다!");
     return true;
   } catch (e) {
