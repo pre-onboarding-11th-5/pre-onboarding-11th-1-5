@@ -22,7 +22,7 @@ const useRedirectByJwt = () => {
       alert("로그인해주세요.");
       navigate("/signin");
     }
-  }, [navigate]);
+  }, [navigate, location.pathname]);
 };
 
 export default useRedirectByJwt;
