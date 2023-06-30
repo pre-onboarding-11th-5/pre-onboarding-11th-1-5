@@ -3,8 +3,8 @@ import { ThemeProvider } from "styled-components";
 import GlobalStyles from "styles/global";
 import { theme } from "styles/theme";
 import loadable from "@loadable/component";
+import RootLayout from "pages/layout";
 
-const RootLayout = loadable(() => import("pages/layout"));
 const LandingPage = loadable(() => import("pages/landingPage"));
 const AuthPage = loadable(() => import("pages/authPage"));
 const TodoPage = loadable(() => import("pages/todoPage"));
