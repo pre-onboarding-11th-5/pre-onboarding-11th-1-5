@@ -3,7 +3,7 @@
 ## # Getting Started
 
 ```
-git clone https://github.com/gyuhoBest/wanted-pre-onboarding-frontend.git
+git clone https://github.com/pre-onboarding-11th-5/pre-onboarding-11th-1-5.git
 
 npm install
 npm start
