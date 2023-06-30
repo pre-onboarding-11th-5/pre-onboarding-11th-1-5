@@ -122,4 +122,5 @@ npm start
 
 <br><br>
 
-## # [노션 링크](https://lean-mahogany-686.notion.site/1-34fe7482542d4185973b2335e4b88f49)
+### # [노션 링크](https://lean-mahogany-686.notion.site/1-34fe7482542d4185973b2335e4b88f49)
+### # [배포 링크](https://pre-onboarding-11th-1-5.vercel.app/)
