@@ -66,7 +66,6 @@ npm start
 │  ├─authPage
 │  ├─landingPage
 │  └─todoPage
-├─routes
 ├─styles
 └─types
 ```
@@ -105,12 +104,21 @@ npm start
 ### 6. todo fetch hook 리팩토링
 - TodoPage에서 todo 데이터 refetch 하던 로직을 useGetTodos로 이전하여 refetch 기능 추상화
 - TodoList 컴포넌트에서 todo 데이터를 관리하던 것을 useGetTodos 훅으로 이전하여 관심사 분리 및 확장성 개선
+![image](https://github.com/pre-onboarding-11th-5/pre-onboarding-11th-1-5/assets/68717963/94c6461b-760c-4188-9508-a061d9e56dff)
 
 <br><br>
 
 ### 7. useInput
 - 반복되는 input 핸들링 로직을 커스텀훅으로 관리하여 코드 중복 해결
 ![image](https://github.com/pre-onboarding-11th-5/pre-onboarding-11th-1-5/assets/68717963/9afb9d74-f53c-4595-986a-a92cfc734407)
+
+<br><br>
+
+### 8. TodoInput 리팩토링
+- 불필요하다고 판단되는 isCompleted를 삭제하고 useInput 적용
+- Todo 입력 시, input이 초기화 되는 로직 추가
+![image](https://github.com/pre-onboarding-11th-5/pre-onboarding-11th-1-5/assets/68717963/56689707-605c-4f1b-95d4-afcd8d1b0be9)
+
 
 <br><br>
 
